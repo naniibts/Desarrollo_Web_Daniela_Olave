@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Form Validation</title>
+    <link rel="stylesheet" type="text/css" href="/tarea2 (1)/tarea2/flaskapp/static/css/aviso.css">
+</head>
+
+
+<body>
+    <nav>
+        <a href="portada.html">Portada</a>
+        <a href="aviso.html">Agregar aviso de adopción</a>
+        <a href="listado.html">Ver listado de adopciones</a>
+        <a href="estadisticas.html">Estadísticas</a>
+    </nav>
+    <div class="main-container">
+        <div id="val-box" hidden>
+            <h2 id="val-msg"></h2>
+            <ul id="val-list"></ul>
+        </div>
+        <form name="myForm" id="myForm" method="post" enctype="multipart/form-data">
+            <h3>Información del Lugar de Entrega</h3>
+            <!--seleccionar la región-->
+            <label for="select-region">Región<span style="color: red;">*</span></label>
+            <select name="select-region" id="select-region" required>
+                <option value="">Seleccione una Región</option>
+            </select><br>
+            <!--seleccionar la comuna-->
+            <label for="select-comuna">Comuna<span style="color: red;">*</span></label>
+            <select name="select-comuna" id="select-comuna" required>
+                <option value="">Seleccione una Comuna</option>
+            </select><br>
+            <!--ingrese el sector-->
+            <label for="sector">Sector</label>
+            <input type="text" name="sector" id="sector" size="100" maxlength="100"><br>
+            
+            <h3>Datos del Contacto</h3>
+            <!--ingrese su nombre-->
+            <label for="nombre">Nombre<span style="color: red;">*</span></label>
+            <input type="nombre" name="nombre" id="nombre" minlength="3" maxlength="200" required><br>
+            <!--ingrese su email-->
+            <label for="email">Email<span style="color: red;">*</span></label>
+            <input type="email" name="email" id="email" minlength="15" maxlength="100" required><br>
+            <!--ingrese su número celular-->
+            <label for="phone">Phone</label>
+            <input type="tel" name="phone" id="phone" minlength="13" placeholder="+569.12345678"><br>
+            <!--selecciona la red social de contacto-->
+            <fieldset>
+                <legend>Redes de contacto (máximo 5)</legend>
+                <label><input type="checkbox" name="redes_contacto" value="Instagram"> Instagram</label><br>
+                <label><input type="checkbox" name="redes_contacto" value="WhatsApp"> WhatsApp</label><br>
+                <label><input type="checkbox" name="redes_contacto" value="Telegram"> Telegram</label><br>
+                <label><input type="checkbox" name="redes_contacto" value="TikTok"> TikTok</label><br>
+                <label><input type="checkbox" name="redes_contacto" value="X"> X</label><br>
+                <label><input type="checkbox" name="redes_contacto" value="Otra"> Otra</label><br>
+            </fieldset>
+            
+            </select><br>
+            <!-- Input para ID o URL, oculto por defecto -->
+            <label for="red-id" >ID o URL de contacto</label>
+            <input type="text" name="red-id" id="red-id" minlength="4" maxlength="50"><br> 
+            
+            <h3>Mascota en Adopción</h3>
+            <!--tipo de la mascota en adopción-->
+            <label for="select-tipo">Tipo<span style="color: red;">*</span></label>
+            <select name="select-tipo" id="select-tipo" required>
+                <option value="">Seleccione el Tipo de Mascota</option>
+                <option value="Perro">Perro</option>
+                <option value="Gato">Gato</option>
+            </select><br>
+            <!--cantidad de mascotas en adopción-->
+            <label for="cant">Cantidad<span style="color: red;">*</span></label>
+            <input type="number" name="cantidad" id="cantidad" min="1" step="1" required><br>
+            <!--edad de mascotas en adopción-->
+            <label for="edad">Edad<span style="color: red;">*</span></label>
+            <input type="number" name="edad" id="edad" min="1" step="1" required><br>
+            <!--unidad de medida de la edad (meses o años)-->
+            <label for="select-medida">Unidad de Medida<span style="color: red;">*</span></label>
+            <select name="select-medida" id="select-medida" required>
+                <option value="">Seleccione una Unidad</option>
+                <option value="Meses">Meses</option>
+                <option value="Años">Años</option>
+            </select><br>
+            <!--fecha de entrega-->
+            <label for="fecha">Fecha de Entrega<span style="color: red;">*</span></label>
+            <input type="datetime-local" name="fecha" id="fecha" required><br>
+
+            <!--descripción de la mascota-->
+            <label for="descricpión" >Descripción de la Mascota</label>
+            <textarea name="descripcion" id="descripcion" rows="10" cols="50"></textarea><br>
+            <!--subir fotos de la mascota-->   
+            <label for="file">Fotos de la mascota (mín 1):<span style="color: red;">*</span></label><br>
+            <div id="contenedorFotos">
+                <input type="file" id="file" name="fotos[]" accept="image/*" required>
+            </div>
+            <button type="button" id="agregarFoto">Agregar otra foto</button>
+            <!--botón de envío-->   
+            <button id="submit-btn" type="button">Agregar este aviso de adopción</button>
+        </form>
+    </div>
+
+    <script src="../js/selection.js"></script>
+    <script src="../js/validation.js"></script>
+</body>
+</html>
