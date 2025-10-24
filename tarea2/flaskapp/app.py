@@ -2,7 +2,9 @@ from flask import Flask, flash, request, render_template, redirect, url_for, ses
 from utils.validations import *
 from database import db 
 from werkzeug.utils import secure_filename
-from database.db import existencia_comuna, get_regiones_y_comunas, agregar_aviso, agregar_redes_contacto, agregar_fotos ,contar_avisos, get_aviso_por_id, listar_avisos
+from database.db import existencia_comuna, get_regiones_y_comunas, agregar_redes_contacto, agregar_fotos ,contar_avisos, get_aviso_por_id, get_last_avisos
+from database.db import agregar_aviso as db_agregar_aviso
+from database.db import listar_avisos as db_listar_avisos
 from sqlalchemy import DateTime
 import hashlib
 import filetype
@@ -12,7 +14,6 @@ UPLOAD_FOLDER = 'static/uploads'
 
 app = Flask(__name__)
 
-
 app.secret_key = "s3cr3t_k3y_adopcion_2025"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
@@ -20,7 +21,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
 # --- Portada ---
 @app.route("/", methods=["GET"])
 def portada():
-    avisos = db.get_avisos(limit=5)
+    avisos = get_last_avisos(limit=5)
     return render_template("portada.html", avisos=avisos)
 
 # --- Agregar aviso de adopción ---
@@ -120,7 +121,7 @@ def agregar_aviso():
 
         # Guardar aviso en la base de datos
         try:
-            aviso_id = agregar_aviso(
+            aviso_id = db_agregar_aviso(
                 comuna_id=comuna_id,
                 sector=sector,
                 nombre=nombre,
@@ -173,7 +174,7 @@ def listar_avisos():
 
     total = contar_avisos()
     total_pages = (total + per_page - 1) // per_page
-    avisos = listar_avisos(limit=per_page, offset=offset)
+    avisos = db_listar_avisos(limit=per_page, offset=offset)
 
     return render_template("listado.html",avisos=avisos,page=page,total_pages=total_pages)
 
