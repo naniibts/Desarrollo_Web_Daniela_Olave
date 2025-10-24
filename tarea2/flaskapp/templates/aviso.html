@@ -2,16 +2,17 @@
 <html>
 <head>
 	<title>Form Validation</title>
-    <link rel="stylesheet" type="text/css" href="/tarea2 (1)/tarea2/flaskapp/static/css/aviso.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/aviso.css') }}">
 </head>
 
 
 <body>
     <nav>
-        <a href="portada.html">Portada</a>
-        <a href="aviso.html">Agregar aviso de adopción</a>
-        <a href="listado.html">Ver listado de adopciones</a>
-        <a href="estadisticas.html">Estadísticas</a>
+        <a href="{{ url_for('index') }}">Portada</a>
+        <a href="{{ url_for('agregar_aviso') }}">Agregar aviso de adopción</a>
+        <a href="{{ url_for('listar_avisos') }}">Ver listado de adopciones</a>
+        <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
+
     </nav>
     <div class="main-container">
         <div id="val-box" hidden>

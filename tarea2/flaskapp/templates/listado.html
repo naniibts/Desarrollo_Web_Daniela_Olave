@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listado de Avisos de Adopción</title>
-    <link rel="stylesheet" href="/tarea2 (1)/tarea2/flaskapp/static/css/listado.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/listado.css') }}">
 </head>
 <body>
     <h1>Listado de Avisos de Adopción</h1>
 
     <nav>
-        <a href="portada.html">Portada</a>
-        <a href="aviso.html">Agregar aviso de adopción</a>
-        <a href="listado.html">Ver listado de adopciones</a>
-        <a href="estadisticas.html">Estadísticas</a>
+        <a href="{{ url_for('index') }}">Portada</a>
+        <a href="{{ url_for('agregar_aviso') }}">Agregar aviso de adopción</a>
+        <a href="{{ url_for('listar_avisos') }}">Ver listado de adopciones</a>
+        <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
+
     </nav>
 
     <table>

@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine, Column, Integer, DateTime, String, ForeignKey, Text
-from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+from sqlalchemy.orm import sessionmaker, declarative_base
+from datetime import datetime
 
 DB_NAME = "tarea2"
 DB_USERNAME = "cc5002"
@@ -32,15 +33,16 @@ class AvisoAdopción(Base):
     __tablename__ = 'aviso_adopcion'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    fecha_ingreso = Column(DateTime, nullable=False, default=datetime.utcnow)
     comuna_id = Column(Integer, ForeignKey('comuna.id'), nullable=False)
     sector = Column(String(100))
     nombre = Column(String(200), nullable=False)
     email = Column(String(100), nullable=False)
     celular = Column(String(15))
-    tipo_mascota = Column(String(50), nullable=False)
+    tipo = Column(String(50), nullable=False)
     cantidad = Column(Integer, nullable=False)
     edad = Column(Integer, nullable=False)
-    unidad_edad = Column(String(10), nullable=False)
+    unidad_medida = Column(String(10), nullable=False)
     fecha_entrega = Column(DateTime, nullable=False)
     descripcion = Column(Text)
 

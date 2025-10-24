@@ -1,11 +1,12 @@
-from flask import Flask, flash, request, render_template, redirect, url_for, session
+from flask import Flask, flash, request, render_template, redirect, url_for, jsonify
+import sqlite3
 from utils.validations import *
 from database import db 
 from werkzeug.utils import secure_filename
 from database.db import existencia_comuna, get_regiones_y_comunas, agregar_redes_contacto, agregar_fotos ,contar_avisos, get_aviso_por_id, get_last_avisos
 from database.db import agregar_aviso as db_agregar_aviso
 from database.db import listar_avisos as db_listar_avisos
-from sqlalchemy import DateTime
+from datetime import datetime
 import hashlib
 import filetype
 import os
@@ -14,15 +15,20 @@ UPLOAD_FOLDER = 'static/uploads'
 
 app = Flask(__name__)
 
+def get_db_connection():
+    conn = sqlite3.connect("database.db")
+    conn.row_factory = sqlite3.Row
+    return conn
+
 app.secret_key = "s3cr3t_k3y_adopcion_2025"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
 
 # --- Portada ---
 @app.route("/", methods=["GET"])
-def portada():
+def index():
     avisos = get_last_avisos(limit=5)
-    return render_template("portada.html", avisos=avisos)
+    return render_template("index.html", avisos=avisos)
 
 # --- Agregar aviso de adopción ---
 @app.route("/agregar_aviso", methods=["GET", "POST"])
@@ -91,7 +97,7 @@ def agregar_aviso():
             errores.append("Fecha de entrega es obligatoria.")
         else:
             try:
-                fecha_entrega = DateTime.fromisoformat(fecha_entrega_str.replace("T", " "))
+                fecha_entrega = datetime.fromisoformat(fecha_entrega_str.replace("T", " "))
             except ValueError:
                 errores.append("Formato de fecha inválido.")
 
@@ -163,7 +169,7 @@ def agregar_aviso():
                 continue
 
         flash("¡Aviso de adopción agregado!", "success")
-        return redirect(url_for("portada"))
+        return redirect(url_for("index"))
     
 
 @app.route("/avisos")
@@ -184,12 +190,71 @@ def ver_aviso(aviso_id):
     if not aviso:
         flash("Aviso no encontrado.", "error")
         return redirect(url_for("listar_avisos"))
-    return render_template("portada.html", aviso=aviso)
+    return render_template("index.html", aviso=aviso)
 
 
 @app.route("/estadisticas")
 def estadisticas():
-    return render_template("estadisticas.html")
+   return render_template("estadisticas.html")
+
+
+# === ESTADÍSTICAS ===
+# Estos endpoints entregan datos JSON a estadisticas.js
+
+@app.route("/api/estadisticas/dias")
+def api_estadisticas_dias():
+    """
+    Devuelve la cantidad de avisos agregados por día.
+    Ejemplo: [{ "dia": "2025-10-01", "cantidad": 3 }, ...]
+    """
+    conn = get_db_connection()
+    data = conn.execute("""
+        SELECT DATE(fecha_publicacion) AS dia, COUNT(*) AS cantidad
+        FROM aviso
+        GROUP BY dia
+        ORDER BY dia
+    """).fetchall()
+    conn.close()
+    return jsonify([dict(row) for row in data])
+
+
+@app.route("/api/estadisticas/tipos")
+def api_estadisticas_tipos():
+    """
+    Devuelve cantidad de avisos por tipo (Perro/Gato).
+    Ejemplo: [{ "tipo": "Perro", "cantidad": 10 }, ...]
+    """
+    conn = get_db_connection()
+    data = conn.execute("""
+        SELECT tipo_mascota AS tipo, COUNT(*) AS cantidad
+        FROM aviso
+        GROUP BY tipo_mascota
+    """).fetchall()
+    conn.close()
+    return jsonify([dict(row) for row in data])
+
+
+@app.route("/api/estadisticas/meses")
+def api_estadisticas_meses():
+    """
+    Devuelve avisos por mes y tipo de mascota.
+    Ejemplo: [{ "mes": "10", "gatos": 5, "perros": 3 }, ...]
+    """
+    conn = get_db_connection()
+    data = conn.execute("""
+        SELECT strftime('%m', fecha_publicacion) AS mes,
+               SUM(CASE WHEN tipo_mascota='Gato' THEN 1 ELSE 0 END) AS gatos,
+               SUM(CASE WHEN tipo_mascota='Perro' THEN 1 ELSE 0 END) AS perros
+        FROM aviso
+        GROUP BY mes
+        ORDER BY mes
+    """).fetchall()
+    conn.close()
+    return jsonify([dict(row) for row in data])
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

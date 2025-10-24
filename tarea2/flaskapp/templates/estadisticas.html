@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas - Adopciones</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estadisticas.css') }}">
+
+</head>
+<body>
+  <h1>Estadísticas del Sistema de Adopciones</h1>
+
+  <nav>
+        <a href="{{ url_for('index') }}">Portada</a>
+        <a href="{{ url_for('agregar_aviso') }}">Agregar aviso de adopción</a>
+        <a href="{{ url_for('listar_avisos') }}">Ver listado de adopciones</a>
+        <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
+  </nav>
+
+  <main>
+<section>
+      <h2>Avisos por día</h2>
+      <canvas id="graficoDias"></canvas>
+    </section>
+
+    <section>
+      <h2>Avisos por tipo</h2>
+      <canvas id="graficoTipos"></canvas>
+    </section>
+
+    <section>
+      <h2>Avisos por mes y tipo</h2>
+      <canvas id="graficoMeses"></canvas>
+    </section>
+
+    <div class="volver">
+      <a href="{{ url_for('index') }}">Volver a la portada</a>
+    </div>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/estadisticas.js') }}"></script>
+</body>
+</html>
