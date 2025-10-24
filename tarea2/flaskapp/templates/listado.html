@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Avisos de Adopción</title>
+    <link rel="stylesheet" href="/tarea2 (1)/tarea2/flaskapp/static/css/listado.css">
+</head>
+<body>
+    <h1>Listado de Avisos de Adopción</h1>
+
+    <nav>
+        <a href="portada.html">Portada</a>
+        <a href="aviso.html">Agregar aviso de adopción</a>
+        <a href="listado.html">Ver listado de adopciones</a>
+        <a href="estadisticas.html">Estadísticas</a>
+    </nav>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha Publicación</th>
+                <th>Fecha Entrega</th>
+                <th>Comuna</th>
+                <th>Sector</th>
+                <th>Cantidad / Tipo / Edad</th>
+                <th>Nombre Contacto</th>
+                <th>Total Fotos</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr onclick="window.location='detalle.html?id=1'">
+                <td>2025-08-18 12:00</td>
+                <td>2025-09-01 10:00</td>
+                <td>Santiago</td>
+                <td>Beauchef 850, terraza</td>
+                <td>1 gato 2 meses</td>
+                <td>María López</td>
+                <td>1</td>
+            </tr>
+            <tr onclick="window.location='detalle.html?id=2'">
+                <td>2025-08-17 19:00</td>
+                <td>2025-08-25 17:00</td>
+                <td>Maipú</td>
+                <td>El Rosal</td>
+                <td>1 perro 10 años</td>
+                <td>Carlos Pérez</td>
+                <td>1</td>
+            </tr>
+            <tr onclick="window.location='detalle.html?id=3'">
+                <td>2025-08-16 18:00</td>
+                <td>2025-08-30 16:00</td>
+                <td>Santiago</td>
+                <td>Parque O'higgins</td>
+                <td>2 gatos 1 mes</td>
+                <td>Ana Silva</td>
+                <td>1</td>
+            </tr>
+            <tr onclick="window.location='detalle.html?id=4'">
+                <td>2025-08-15 15:30</td>
+                <td>2025-09-10 13:30</td>
+                <td>San Javier</td>
+                <td>San Pablo</td>
+                <td>1 perro 13 años</td>
+                <td>Luis Rojas</td>
+                <td>1</td>
+            </tr>
+            <tr onclick="window.location='detalle.html?id=5'">
+                <td>2025-08-15 10:45</td>
+                <td>2025-08-28 16:30</td>
+                <td>Las Condes</td>
+                <td>Mall Plaza</td>
+                <td>4 gatos 3 meses</td>
+                <td>Camila Fuentes</td>
+                <td>1</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="pagination">
+        {% if page > 1 %}
+            <a href="{{ url_for('listar_avisos', page=page-1) }}">Anterior</a>
+        {% endif %}
+        <span>Página {{ page }} de {{ total_pages }}</span>
+        {% if total_pages > page %}
+            <a href="{{ url_for('listar_avisos', page=page+1) }}">Siguiente</a>
+        {% endif %}
+    </div>
+
+</body>
+</html>
